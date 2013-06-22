@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>How to visualize the data over Web using Shiny + R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="How to visualize the data over Web using Shiny + R">
+  <meta name="author" content="Neependra Khare">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>How to visualize the data over Web using Shiny + R</h1>
+        <h2>Open Data Camp 2013, Hyderabad</h2>
+        <p>Neependra Khare<br/></p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>R</h2>
+  </hgroup>
+  <article>
+    <ol>
+<li>R is a free software environment for statistical computing and graphics</li>
+<li>Excellent for data visualization</li>
+<li>Very active community</li>
+<li>..but..
+
+<ul>
+<li>Its a very personal experience </li>
+<li>Sharing is not easy</li>
+</ul></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="middle" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Shiny</h2>
+  </hgroup>
+  <article>
+    <p>Shiny = R + interactivity + web + easy</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Shiny</h2>
+  </hgroup>
+  <article>
+    <ol>
+<li>Turns R analyses into interactive web applications</li>
+<li>No HTML or JavaScript knowledge is necessary</li>
+<li>But fully customizable and extensible with HTML/CSS/JavaScript</li>
+<li>Web UI</li>
+<li>Uses “reactive” programming model</li>
+<li>Free and Open Source (GPL-3)</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Making an App</h2>
+  </hgroup>
+  <article>
+    <ol>
+<li>Create a directory for the app</li>
+<li>Create two file in that directory
+
+<ul>
+<li>ui.R – defines user interface</li>
+<li>server.R – specifies the logic behind user interface</li>
+</ul></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>ui.R</h2>
+  </hgroup>
+  <article>
+    <pre><code>library(shiny)
+
+shinyUI(pageWithSidebar(
+  headerPanel(&#39;District Wise Rural Health Care Infrastructure&#39;),
+  sidebarPanel(
+    selectInput(&quot;dataset&quot;, &quot;Choose a States/Union Territory:&quot;,
+                choices = states),
+    selectInput(&quot;center&quot;, &quot;Choose a center:&quot;,
+                choices = centers ),
+
+    downloadButton(&#39;downloadData&#39;, &#39;Download&#39;)
+  ),
+  mainPanel(
+    plotOutput(&#39;plot&#39;),
+    tableOutput(&#39;table&#39;)
+  )
+))
+
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>server.R</h2>
+  </hgroup>
+  <article>
+    <pre><code>shinyServer(function(input, output) {
+  datasetInput &lt;- reactive({
+        state = input$dataset
+        center = input$center
+        df = read.csv(&quot;District_Wise_Rural_HealthCare_Infrastructure.csv&quot;)
+        sub = subset.data.frame(df, df$States.Union.Territory == state)
+        ndf = data.frame(District = sub$Name.of.the.District, Centers = eval(parse(text = paste0(&quot;sub$&quot;,center))))
+  })
+
+  output$table &lt;- renderTable({
+    datasetInput()
+  })
+})
+
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Demo 1</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li><p>District-Wise Availability Of Health Centres In India as of March 2011</p></li>
+<li><p>Data Source</p>
+
+<ul>
+<li>data.gov.in</li>
+<li>The number of state-wise and district-wise availability of Sub-Centres, Primary Health Centres, Community Health Centres, Sub Divisional Hospitals and District hospitals In India.</li>
+<li><a href="http://data.gov.in/dataset/district-wise-availability-health-centres-india-march-2011">http://data.gov.in/dataset/district-wise-availability-health-centres-india-march-2011</a></li>
+</ul></li>
+<li><p>http://localhost:3838/demo1/</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Demo 2</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li><p>Enrolment for Ph D/M.phil across India between 2001-09</p></li>
+<li><p>Data Source </p>
+
+<ul>
+<li>data.gov.in</li>
+<li>Enrolment In Higher Education According To Faculty And Stage (All India And State wise)</li>
+<li><a href="http://data.gov.in/dataset/enrolment-higher-education-according-faculty-and-stage-all-india-and-state-wise">http://data.gov.in/dataset/enrolment-higher-education-according-faculty-and-stage-all-india-and-state-wise</a></li>
+</ul></li>
+<li><p>http://localhost:3838/demo2/</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Deploying Shiny Apps</h2>
+  </hgroup>
+  <article>
+    <ol>
+<li>Deploy is locally
+
+<ul>
+<li>R package itself is not designed for web deployments</li>
+</ul></li>
+<li>Self-hosted Shiny Server
+
+<ul>
+<li><a href="https://github.com/rstudio/shiny-server">https://github.com/rstudio/shiny-server</a></li>
+</ul></li>
+<li>RStudio-hosted Shiny Server</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="middle" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Questions</h2>
+  </hgroup>
+  <article>
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>References</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li><a href="http://www.r-project.org/">http://www.r-project.org/</a></li>
+<li><a href="http://www.rstudio.com/shiny/">http://www.rstudio.com/shiny/</a></li>
+<li><a href="http://joecheng.com/R/SeattleMay2013/assets/fallback/index.html%5C">http://joecheng.com/R/SeattleMay2013/assets/fallback/index.html\</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>
