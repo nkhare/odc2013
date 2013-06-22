@@ -1,6 +1,6 @@
 ---
 title       : How to visualize the data over Web using Shiny + R
-subtitle    : Open Data Camp 2013, Hyderabad 
+subtitle    : Open Data Camp 2013, ISB Hyderabad 
 author      : Neependra Khare
 job         : 
 framework   : io2012   # {io2012, html5slides, shower, dzslides, ...}
