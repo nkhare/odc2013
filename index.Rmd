@@ -99,7 +99,12 @@ shinyServer(function(input, output) {
   - data.gov.in
   - The number of state-wise and district-wise availability of Sub-Centres, Primary Health Centres, Community Health Centres, Sub Divisional Hospitals and District hospitals In India.
     - http://data.gov.in/dataset/district-wise-availability-health-centres-india-march-2011
-- http://localhost:3838/demo1/
+- Running from self-hosted Shiny Server
+  - http://localhost:3838/demo1/
+- Running from RStudio-hosted Shiny Server
+  - install.packages('shiny')
+  - shiny::runGist('5835958')
+  
 
 ---
 
@@ -112,7 +117,11 @@ shinyServer(function(input, output) {
   - data.gov.in
   - Enrolment In Higher Education According To Faculty And Stage (All India And State wise)
     - http://data.gov.in/dataset/enrolment-higher-education-according-faculty-and-stage-all-india-and-state-wise
-- http://localhost:3838/demo2/
+- Running from self-hosted Shiny Server
+  - http://localhost:3838/demo2/
+- Running from RStudio-hosted Shiny Server
+  - install.packages('shiny')
+  - shiny::runGist('5836010')
 
 
 ---
